@@ -1,0 +1,227 @@
+# BLKOUT Event Listings Agent - Implementation Tasks
+
+This document provides a comprehensive list of tasks for implementing the BLKOUT Event Listings Agent, organized by project phase and component. Each task includes a priority level, estimated effort, and notes for AI-assisted development.
+
+## Phase 1: Project Setup & Infrastructure
+
+### Repository Setup
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 1.1 | Create GitHub repository with proposed structure | High | 1 hour | Use provided repository structure template |
+| 1.2 | Set up README with project overview and setup instructions | High | 1 hour | Include system diagram and core components |
+| 1.3 | Create .gitignore file for n8n, WordPress, and other dependencies | Medium | 30 min | Ensure API keys and credentials are excluded |
+| 1.4 | Set up issue templates for bugs, features, and tasks | Low | 30 min | Use standard GitHub templates as starting point |
+
+### Development Environment
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 1.5 | Set up n8n development instance | High | 2 hours | Document installation process in README |
+| 1.6 | Create development Airtable base | High | 1 hour | Follow schema defined in airtable-schema.md |
+| 1.7 | Set up WordPress development environment | Medium | 2 hours | Use local development environment like LocalWP |
+| 1.8 | Configure API keys for development (OpenAI, Airtable, Google) | High | 1 hour | Document process for securely managing keys |
+
+### Documentation Foundations
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 1.9 | Create system architecture diagram and documentation | High | 2 hours | Include data flow between components |
+| 1.10 | Document Airtable schema with field definitions | High | 1 hour | Use provided schema definitions as base |
+| 1.11 | Outline AI prompt strategy for event classification | Medium | 1 hour | Document principles for designing effective prompts |
+| 1.12 | Create user stories for end-user experience | Medium | 1 hour | Focus on community member and admin perspectives |
+
+## Phase 2: Airtable Database Implementation
+
+### Database Setup
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 2.1 | Create RawEvents table with all required fields | High | 1 hour | Include validation rules where appropriate |
+| 2.2 | Create ApprovedEvents table with all required fields | High | 1 hour | Set up linked records to RawEvents where needed |
+| 2.3 | Create EventsForReview table with all required fields | High | 1 hour | Include review status and feedback fields |
+| 2.4 | Create Subscribers table with preference fields | High | 1 hour | Design with GDPR compliance in mind |
+| 2.5 | Create Newsletters table for archive and analytics | Medium | 1 hour | Include performance metrics fields |
+| 2.6 | Create SystemReports table for monitoring | Medium | 30 min | Design for easy visualization of system health |
+
+### Airtable Views and Automation
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 2.7 | Create filtered views for different event themes | Medium | 1 hour | Set up one view per theme category |
+| 2.8 | Set up views for events needing review | High | 30 min | Sort by relevance score for prioritization |
+| 2.9 | Create calendar view for upcoming events | Medium | 30 min | Color-code by theme |
+| 2.10 | Set up Airtable automations for record cleanup | Low | 1 hour | Auto-archive past events |
+
+## Phase 3: n8n Workflow Implementation
+
+### Daily Web Scraper Workflow
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 3.1 | Implement basic workflow structure with schedule trigger | High | 1 hour | Set up daily execution schedule |
+| 3.2 | Add HTTP request nodes for first 3 websites | High | 2 hours | Target sites: UK Black Pride, Gays The Word, etc. |
+| 3.3 | Implement HTML extraction nodes with proper selectors | High | 3 hours | May require examination of site structures |
+| 3.4 | Create data standardization functions | High | 2 hours | Ensure consistent date formats, field names |
+| 3.5 | Add Airtable integration for storing raw events | High | 1 hour | Include deduplication logic |
+| 3.6 | Add error handling and logging | Medium | 1 hour | Log failures for specific sites |
+| 3.7 | Add remaining website scrapers (up to 10 total) | Medium | 3 hours | Prioritize based on event relevance |
+| 3.8 | Implement rate limiting to avoid IP blocking | Medium | 1 hour | Add random delays between requests |
+
+### Event Processor Workflow
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 3.9 | Create base workflow with scheduled trigger | High | 1 hour | Configure to run every 6 hours |
+| 3.10 | Add Airtable node to fetch unprocessed events | High | 30 min | Use filter for unprocessed records |
+| 3.11 | Implement OpenAI integration for relevance analysis | High | 2 hours | Design prompt for community relevance |
+| 3.12 | Create function to parse AI response and update events | High | 2 hours | Handle JSON parsing and error cases |
+| 3.13 | Add conditional logic for approval paths | High | 1 hour | Set thresholds for auto-approval and review |
+| 3.14 | Create Airtable update nodes for all tables | High | 1 hour | Ensure status fields are correctly updated |
+| 3.15 | Add error recovery and notification system | Medium | 1 hour | Send alerts for processing failures |
+
+### Google Calendar Integration
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 3.16 | Set up Google Calendar credentials in n8n | High | 1 hour | Follow OAuth setup process carefully |
+| 3.17 | Create workflow with recurring schedule | High | 30 min | Configure for 4-hour intervals |
+| 3.18 | Implement logic to fetch calendar events | High | 1 hour | Include proper time range filtering |
+| 3.19 | Add deduplication check against existing events | High | 1 hour | Match on event title, date, and location |
+| 3.20 | Create data transformation for Airtable format | High | 1 hour | Extract and format relevant calendar fields |
+| 3.21 | Implement Airtable integration for storage | High | 30 min | Add source tracking for calendar events |
+
+### Newsletter Generator Workflow
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 3.22 | Create weekly scheduled workflow | High | 30 min | Configure for Thursday execution |
+| 3.23 | Add Airtable node to fetch upcoming events | High | 30 min | Filter for next 30 days of events |
+| 3.24 | Implement event grouping by theme and timeframe | High | 2 hours | Create function for organizing data |
+| 3.25 | Set up OpenAI integration for newsletter content | High | 2 hours | Design prompt with style guidelines |
+| 3.26 | Create email formatting and template function | High | 1 hour | Ensure mobile-friendly HTML |
+| 3.27 | Add subscriber fetching logic with preferences | High | 1 hour | Filter subscribers by preferences |
+| 3.28 | Implement email sending node | High | 1 hour | Configure SMTP settings properly |
+| 3.29 | Add WordPress update node for widget refresh | Medium | 1 hour | Set up REST API endpoint access |
+| 3.30 | Create newsletter archive in Airtable | Medium | 30 min | Store HTML content and metrics |
+
+### Master Coordinator Workflow
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 3.31 | Create monthly scheduled workflow | Medium | 30 min | Schedule for 1st of month |
+| 3.32 | Add status checks for all other workflows | Medium | 1 hour | Implement execution status verification |
+| 3.33 | Implement Airtable queries for system metrics | Medium | 1 hour | Pull review queue stats, event counts |
+| 3.34 | Create health report generation function | Medium | 1 hour | Calculate key metrics and identify issues |
+| 3.35 | Implement conditional logic for alerting | Medium | 30 min | Define thresholds for attention needed |
+| 3.36 | Add email alerting for system issues | Medium | 30 min | Format clear, actionable alerts |
+| 3.37 | Create dashboard update via WordPress API | Low | 1 hour | Push stats to admin dashboard |
+
+## Phase 4: WordPress Integration
+
+### Plugin Development
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 4.1 | Create plugin structure and main file | High | 1 hour | Follow WordPress plugin best practices |
+| 4.2 | Implement REST API endpoint for events data | High | 2 hours | Add proper authentication and validation |
+| 4.3 | Create shortcode for events display | High | 1 hour | Make attributes customizable |
+| 4.4 | Develop template for events display | High | 2 hours | Ensure responsive design |
+| 4.5 | Add CSS styling for events widget | High | 2 hours | Match with BLKOUT branding |
+| 4.6 | Implement JavaScript for interactive filtering | Medium | 2 hours | Add client-side theme and date filters |
+| 4.7 | Create admin settings page | Medium | 2 hours | Allow customization of display options |
+| 4.8 | Add caching system for performance | Medium | 1 hour | Cache event data with expiration |
+| 4.9 | Implement system status dashboard | Low | 2 hours | Show key metrics from coordinator workflow |
+
+### WordPress Theme Integration
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 4.10 | Create widget area for events display | Medium | 30 min | Add to sidebar or dedicated area |
+| 4.11 | Add shortcode to appropriate pages | Medium | 30 min | Consider events page, community page |
+| 4.12 | Ensure mobile responsive design | High | 1 hour | Test on multiple device sizes |
+| 4.13 | Add SEO metadata for events | Low | 1 hour | Improve discoverability of events |
+
+## Phase 5: Testing and Refinement
+
+### System Testing
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 5.1 | Test daily scraper with sample websites | High | 2 hours | Verify data extraction accuracy |
+| 5.2 | Test event processor with variety of events | High | 2 hours | Check relevance scores across categories |
+| 5.3 | Test Google Calendar integration | High | 1 hour | Verify event import and deduplication |
+| 5.4 | Test newsletter generation with sample data | High | 1 hour | Review content quality and formatting |
+| 5.5 | Test email delivery to multiple clients | High | 1 hour | Check rendering on mobile and desktop |
+| 5.6 | Test WordPress widget display | High | 1 hour | Verify filtering and responsiveness |
+| 5.7 | Perform end-to-end system test | High | 3 hours | Validate complete workflow from scraping to display |
+
+### Refinement
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 5.8 | Refine AI prompts based on test results | High | 2 hours | Improve relevance scoring accuracy |
+| 5.9 | Optimize scraper performance | Medium | 1 hour | Reduce execution time |
+| 5.10 | Enhance error handling throughout | Medium | 2 hours | Add recovery mechanisms |
+| 5.11 | Add additional logging for troubleshooting | Medium | 1 hour | Include key decision points |
+| 5.12 | Improve newsletter design | Medium | 2 hours | Enhance readability and engagement |
+| 5.13 | Optimize WordPress widget performance | Medium | 1 hour | Minimize load time impact |
+
+## Phase 6: Documentation and Deployment
+
+### User Documentation
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 6.1 | Create system overview documentation | High | 2 hours | Include architecture diagram |
+| 6.2 | Write Airtable administration guide | High | 2 hours | Document table relationships and maintenance |
+| 6.3 | Develop n8n workflow management guide | High | 3 hours | Include troubleshooting procedures |
+| 6.4 | Create WordPress plugin documentation | High | 2 hours | Document shortcode options and settings |
+| 6.5 | Write subscriber management procedures | Medium | 1 hour | Include GDPR compliance notes |
+
+### Technical Documentation
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 6.6 | Document API interactions and dependencies | High | 2 hours | Create service dependency diagram |
+| 6.7 | Create credential management guide | High | 1 hour | Document secure credential handling |
+| 6.8 | Document error codes and recovery procedures | Medium | 2 hours | Create troubleshooting decision tree |
+| 6.9 | Write monitoring and maintenance procedures | Medium | 2 hours | Include regular health check protocol |
+| 6.10 | Create backup and recovery documentation | Medium | 1 hour | Document procedures for each component |
+
+### Deployment
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 6.11 | Set up production n8n instance | High | 2 hours | Configure for reliability and monitoring |
+| 6.12 | Finalize production Airtable base | High | 1 hour | Set up appropriate access controls |
+| 6.13 | Deploy WordPress plugin to production | High | 1 hour | Ensure compatibility with theme |
+| 6.14 | Configure production API credentials | High | 1 hour | Use secure credential storage |
+| 6.15 | Perform initial production run | High | 2 hours | Monitor closely for issues |
+| 6.16 | Establish monitoring and alerting | Medium | 2 hours | Set up appropriate notifications |
+
+## Phase 7: Launch and Feedback
+
+### Launch
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 7.1 | Announce newsletter to community | High | 1 hour | Create signup campaign |
+| 7.2 | Present events widget on website | High | 30 min | Add promotional messaging |
+| 7.3 | Reach out to event organizers | Medium | 2 hours | Establish direct relationships |
+| 7.4 | Create social media announcement | Medium | 1 hour | Highlight community benefit |
+
+### Feedback and Iteration
+
+| Task ID | Description | Priority | Est. Effort | Notes for AI Assistance |
+|---------|-------------|----------|-------------|-------------------------|
+| 7.5 | Collect initial user feedback | High | Ongoing | Create feedback mechanism |
+| 7.6 | Review event relevance accuracy | High | 2 hours | Adjust AI prompts if needed |
+| 7.7 | Analyze newsletter engagement metrics | Medium | 1 hour | Identify improvement opportunities |
+| 7.8 | Refine based on community feedback | High | 3 hours | Prioritize high-impact changes |
+| 7.9 | Add new event sources based on gaps | Medium | 2 hours | Continuously improve coverage |
+| 7.10 | Document lessons learned | Medium | 2 hours | Create knowledge base for future reference |
+
+## Total Estimated Effort: ~125-150 hours
+
+This implementation plan provides a comprehensive roadmap for building the BLKOUT Event Listings Agent. The tasks are designed to be logical, incremental steps that can be easily assigned and tracked, with appropriate context for AI-assisted development.
