@@ -1,0 +1,360 @@
+# AI Prompting Guide for BLKOUT Event Listings Agent
+
+This document provides structured prompting templates for working with AI coding assistants like GitHub Copilot, Claude, or ChatGPT when implementing different components of the BLKOUT Event Listings Agent. Use these templates to maintain consistency and ensure that AI assistance aligns with project goals.
+
+## General Project Context for AI Tools
+
+When starting a session with an AI tool, provide this overview:
+
+```
+I'm working on the BLKOUT Event Listings Agent, an automated system that collects, evaluates, and distributes events relevant to the Black queer UK community. The system uses n8n workflows, Airtable databases, and AI-powered analysis to process events from websites and a Google Calendar, then distributes them through email newsletters and a WordPress widget.
+
+The project emphasizes relationship-centered community building, focusing on meaningful connections rather than just content volume. Events should be evaluated for their relevance to Black queer experiences in the UK context.
+
+I'm currently working on [COMPONENT] and need assistance with [SPECIFIC TASK].
+```
+
+## Component-Specific Prompting
+
+### 1. Web Scraper Development
+
+When working on web scrapers, use this template:
+
+```
+I need to create an n8n workflow that scrapes events from [WEBSITE_NAME]. The events are located in [DESCRIBE_LOCATION_ON_PAGE] and typically include title, date, location, and description information.
+
+I need help with:
+1. Identifying the correct CSS selectors to extract the event information
+2. Creating a JavaScript function that standardizes the extracted data into this format:
+   {
+     "name": "Event Title",
+     "startDate": "YYYY-MM-DD",
+     "endDate": "YYYY-MM-DD",
+     "location": "Venue Name, City",
+     "description": "Event description text",
+     "url": "https://event-link.com",
+     "source": "Source Website Name"
+   }
+
+The site structure looks like this:
+[PASTE_HTML_SAMPLE_OR_DESCRIBE_STRUCTURE]
+```
+
+### 2. AI Analysis Prompts
+
+When developing the OpenAI prompts for event analysis:
+
+```
+I'm creating an n8n workflow that uses OpenAI to analyze event relevance for the Black queer UK community. I need to develop an effective prompt that will:
+
+1. Evaluate an event's relevance on a scale of 0-10
+2. Categorize the event into one of these themes: Arts, Social, Health, Activism, Professional, Community, Other
+3. Identify any secondary themes that apply
+4. Provide brief reasoning for the assessment
+
+Here's the event data format I'll be sending:
+- Name: [EVENT_NAME]
+- Date: [EVENT_DATE]
+- Location: [EVENT_LOCATION]
+- Description: [EVENT_DESCRIPTION]
+- Source: [EVENT_SOURCE]
+
+The analysis should consider UK cultural context and Black queer community interests specifically.
+```
+
+### 3. Newsletter Generation
+
+For newsletter template development:
+
+```
+I'm developing an n8n workflow that generates email newsletters for the Black queer UK community, showcasing upcoming events. I need help creating:
+
+1. An OpenAI prompt that will generate engaging, community-centered newsletter content
+2. HTML email template structure that is responsive and accessible
+3. JavaScript organization of events by theme (Arts, Social, Health, Activism, Professional, Community) and timeframe (This Week, Next Week, Later This Month)
+
+The system should create content that feels personal, highlights community connection, and presents events in an engaging way. The tone should be warm, inclusive, and speak directly to community members.
+
+Here's my event data structure:
+[PROVIDE_SAMPLE_EVENT_DATA]
+```
+
+### 4. WordPress Plugin Development
+
+For WordPress integration:
+
+```
+I'm creating a WordPress plugin to display events from the BLKOUT Event Listings Agent. The plugin needs to:
+
+1. Register a REST API endpoint to receive event data from n8n
+2. Create a shortcode [blkout_events] for displaying events
+3. Develop a responsive, filterable event display template
+4. Provide theme-based and date-based filtering
+
+I need help with [SPECIFIC_PART] of this implementation. Here's my current code:
+[PASTE_RELEVANT_CODE]
+```
+
+### 5. Airtable Schema Development
+
+When designing Airtable tables:
+
+```
+I'm setting up an Airtable base for the BLKOUT Event Listings Agent. I need help designing the [TABLE_NAME] table with appropriate fields, validations, and relationships.
+
+The table will store [DESCRIBE_PURPOSE] and needs to include fields for [LIST_KEY_DATA_POINTS].
+
+Other tables in the base include:
+- RawEvents: Stores all scraped and imported events
+- ApprovedEvents: Contains events approved for display
+- EventsForReview: Holds events that need manual review
+- [ANY_OTHER_TABLES]
+
+I need help determining:
+1. The optimal field types for each data point
+2. Any formula fields that would be useful
+3. Appropriate validations for data integrity
+4. Views that would help with [SPECIFIC_USE_CASE]
+```
+
+## Task-Specific Prompting Examples
+
+### Example 1: Debugging a Web Scraper
+
+```
+My n8n web scraper for [WEBSITE] isn't correctly extracting event dates. The current selector is:
+
+```css
+.event-date
+```
+
+But this is returning null for some events. Here's a sample of the HTML structure:
+
+```html
+[PASTE_HTML_SAMPLE]
+```
+
+How should I modify the selector or extraction approach to reliably get event dates from this structure?
+```
+
+### Example 2: Improving AI Relevance Scoring
+
+```
+My event processor is using this OpenAI prompt for relevance scoring:
+
+[CURRENT_PROMPT]
+
+I'm finding that events related to [SPECIFIC_TOPIC] are being scored too low, while [OTHER_TOPIC] events are scored too high. How should I refine this prompt to better reflect the interests of the Black queer UK community?
+
+Examples of incorrectly scored events:
+1. [EVENT_EXAMPLE_1] - Scored [SCORE] but should be higher
+2. [EVENT_EXAMPLE_2] - Scored [SCORE] but should be lower
+```
+
+### Example 3: Newsletter Design Enhancement
+
+```
+I'm refining the newsletter template for our event listings. The current template is:
+
+```html
+[CURRENT_TEMPLATE_HTML]
+```
+
+I'd like to improve:
+1. Mobile responsiveness, especially for event cards
+2. Visual hierarchy to emphasize event dates and themes
+3. Add more community-centered language in the introduction
+
+Can you provide suggestions for these improvements while maintaining a clean, accessible design?
+```
+
+## Evaluation Guidelines for AI-Generated Content
+
+When evaluating AI-generated code or content, check for:
+
+1. **Community Relevance**: Does the solution center Black queer UK perspectives and needs?
+2. **Technical Correctness**: Is the code functional and optimized?
+3. **Accessibility**: Is the solution accessible to all community members?
+4. **Maintainability**: Is the code well-organized and documented?
+5. **Scalability**: Will the solution work as event volume grows?
+
+## Project Values to Emphasize with AI Tools
+
+When refining AI-generated suggestions, prioritize:
+
+1. **Relationship-Centered Design**: Features that foster community connection over content volume
+2. **Community Ownership**: Solutions that give control to the community
+3. **Inclusive Language**: Communication that speaks to the diversity of the Black queer UK experience
+4. **Technical Sustainability**: Code that can be maintained with limited resources
+5. **Data Privacy**: Approaches that respect user data and consent
+
+By consistently using these prompting guidelines, you'll help ensure that AI tools contribute to your project in ways that align with your social justice principles and community-centered approach. The structured nature of these prompts will also help prevent project drift by keeping AI assistance focused on specific implementation tasks rather than introducing unnecessary complexity.
+
+## Handling Sensitive Community Context
+
+When working with AI tools on community-specific features:
+
+```
+I'm developing a feature that specifically serves the Black queer UK community. This requires careful consideration of:
+
+1. Appropriate language and terminology that respects community identity
+2. Recognition of the unique intersection of racial and queer experiences in the UK context
+3. Sensitivity to privacy and safety concerns
+
+The specific feature I'm working on is [FEATURE_DESCRIPTION]. 
+
+Please help me design/implement this in a way that centers the community's needs while avoiding:
+- Oversimplification of complex identities
+- Language that reinforces stereotypes
+- Features that might inadvertently expose vulnerable users
+```
+
+## AI-Assisted Testing Prompts
+
+For generating test cases and validation approaches:
+
+```
+I need to test the [COMPONENT] of the BLKOUT Event Listings Agent. This component [DESCRIBE_FUNCTIONALITY].
+
+Please help me create:
+1. A comprehensive set of test cases covering typical and edge cases
+2. Input data that reflects the diversity of real-world events in the Black queer UK community
+3. Validation criteria that ensure the component is working as intended
+
+Specific scenarios I want to test include:
+- [SCENARIO_1]
+- [SCENARIO_2]
+- [SCENARIO_3]
+```
+
+## Refining AI-Generated Code
+
+When you receive code from an AI assistant that needs refinement:
+
+```
+You've provided me with code for [FEATURE/COMPONENT]. I'd like to refine it to better align with our project principles:
+
+1. The code should be easily maintainable by developers with moderate technical skills
+2. It should prioritize reliability over complexity
+3. It should include clear error handling that provides actionable information
+4. Comments should explain "why" not just "what" the code is doing
+
+Additionally, I see these specific issues that need addressing:
+- [ISSUE_1]
+- [ISSUE_2]
+- [ISSUE_3]
+
+Please help me refine this code while maintaining its core functionality.
+```
+
+## Documentation Generation
+
+For creating component documentation:
+
+```
+I need to create documentation for the [COMPONENT] of our BLKOUT Event Listings Agent. This component [DESCRIBE_FUNCTIONALITY].
+
+Please help me generate:
+1. A clear overview of the component's purpose within the system
+2. Step-by-step setup instructions for new team members
+3. Troubleshooting guidance for common issues
+4. Configuration options and their effects
+
+The documentation should be accessible to team members with varying technical backgrounds and focus on practical usage scenarios.
+```
+
+## Workflow Optimization
+
+When seeking to improve existing workflows:
+
+```
+I have an n8n workflow for [WORKFLOW_FUNCTIONALITY] that's working but could be optimized. Current issues include:
+- [ISSUE_1] (e.g., slow execution time)
+- [ISSUE_2] (e.g., occasional failures)
+- [ISSUE_3] (e.g., complex maintenance)
+
+Here's the current workflow structure:
+[DESCRIBE_CURRENT_NODES_AND_FLOW]
+
+How can I optimize this workflow while ensuring it remains reliable and maintainable? I'm particularly interested in:
+1. Reducing execution time
+2. Improving error handling
+3. Simplifying the overall structure
+```
+
+## Code Review Requests
+
+When asking AI to review your code:
+
+```
+I've implemented [FEATURE/COMPONENT] for the BLKOUT Event Listings Agent. Before committing, I'd like a code review focusing on:
+1. Potential bugs or edge cases I've missed
+2. Opportunities to improve performance
+3. Better error handling approaches
+4. Alignment with accessibility standards
+
+Here's my implementation:
+[PASTE_CODE]
+
+Please provide constructive feedback with specific suggestions for improvement rather than complete rewrites.
+```
+
+## Milestone Planning
+
+For breaking down larger tasks:
+
+```
+I'm approaching the [MILESTONE_NAME] milestone of our BLKOUT Event Listings Agent. This involves implementing:
+- [MAJOR_COMPONENT_1]
+- [MAJOR_COMPONENT_2]
+- [MAJOR_COMPONENT_3]
+
+I need help breaking this down into logical, sequenced tasks that:
+1. Build incrementally toward the complete functionality
+2. Allow for testing at each stage
+3. Minimize dependencies between tasks where possible
+4. Prioritize core functionality before refinements
+
+Please suggest a task breakdown with estimated effort for each task.
+```
+
+## Troubleshooting Assistance
+
+When facing specific issues:
+
+```
+I'm encountering an issue with the [COMPONENT] of our BLKOUT Event Listings Agent. The specific problem is:
+
+[DESCRIBE_PROBLEM_WITH_DETAILS]
+
+Here's the relevant code/configuration:
+[PASTE_RELEVANT_CODE]
+
+Error messages or unexpected behavior:
+[PASTE_ERROR_OR_DESCRIBE_BEHAVIOR]
+
+What I've tried so far:
+- [ATTEMPT_1]
+- [ATTEMPT_2]
+- [ATTEMPT_3]
+
+Please help me diagnose the root cause and suggest solutions that maintain the overall architecture of the system.
+```
+
+## Reminder of Project Values
+
+At any point when you feel the AI assistance may be drifting from the project's core values, use this prompt:
+
+```
+Before proceeding, I want to re-center on the core values of this project:
+
+1. Building meaningful connection in the Black queer UK community
+2. Creating sustainable, accessible technology solutions
+3. Prioritizing community ownership and agency
+4. Respecting privacy and consent
+5. Using technology as a tool for liberation, not surveillance or control
+
+With these values in mind, let's revisit the current task of [CURRENT_TASK] and ensure our approach aligns with these principles.
+```
+
+By consistently using these templates, you'll maintain focus on specific implementation tasks while ensuring that all work aligns with the project's social justice principles and community-centered approach.
