@@ -1,0 +1,335 @@
+{
+  "user_rewards": [],
+  "reward_actions": [
+    {
+      "id": "signup",
+      "name": "Sign Up",
+      "description": "Sign up for BLKOUTHUB",
+      "points": 10,
+      "category": "onboarding",
+      "one_time": true
+    },
+    {
+      "id": "complete_profile",
+      "name": "Complete Profile",
+      "description": "Complete your BLKOUTHUB profile",
+      "points": 20,
+      "category": "onboarding",
+      "one_time": true
+    },
+    {
+      "id": "complete_survey",
+      "name": "Complete Survey",
+      "description": "Complete a BLKOUTHUB survey",
+      "points": 30,
+      "category": "engagement",
+      "one_time": false
+    },
+    {
+      "id": "attend_event",
+      "name": "Attend Event",
+      "description": "Attend a BLKOUTHUB event",
+      "points": 50,
+      "category": "engagement",
+      "one_time": false
+    },
+    {
+      "id": "refer_friend",
+      "name": "Refer a Friend",
+      "description": "Refer a friend to BLKOUTHUB",
+      "points": 25,
+      "category": "referral",
+      "one_time": false
+    },
+    {
+      "id": "challenge_completion",
+      "name": "Complete Challenge",
+      "description": "Complete a community challenge",
+      "points": 0,
+      "category": "challenge",
+      "one_time": false
+    }
+  ],
+  "achievements": [
+    {
+      "id": "welcome",
+      "name": "Welcome to BLKOUTHUB",
+      "description": "Join the BLKOUTHUB community",
+      "badge_image": "welcome_badge.png",
+      "category": "onboarding",
+      "criteria": {
+        "type": "action",
+        "action_id": "signup",
+        "count": 1
+      },
+      "points_reward": 5
+    },
+    {
+      "id": "survey_taker",
+      "name": "Survey Taker",
+      "description": "Complete your first survey",
+      "badge_image": "survey_badge.png",
+      "category": "engagement",
+      "criteria": {
+        "type": "action",
+        "action_id": "complete_survey",
+        "count": 1
+      },
+      "points_reward": 10
+    },
+    {
+      "id": "survey_master",
+      "name": "Survey Master",
+      "description": "Complete 5 surveys",
+      "badge_image": "survey_master_badge.png",
+      "category": "engagement",
+      "criteria": {
+        "type": "action",
+        "action_id": "complete_survey",
+        "count": 5
+      },
+      "points_reward": 50
+    },
+    {
+      "id": "event_attendee",
+      "name": "Event Attendee",
+      "description": "Attend your first BLKOUTHUB event",
+      "badge_image": "event_badge.png",
+      "category": "engagement",
+      "criteria": {
+        "type": "action",
+        "action_id": "attend_event",
+        "count": 1
+      },
+      "points_reward": 15
+    },
+    {
+      "id": "event_enthusiast",
+      "name": "Event Enthusiast",
+      "description": "Attend 3 BLKOUTHUB events",
+      "badge_image": "event_enthusiast_badge.png",
+      "category": "engagement",
+      "criteria": {
+        "type": "action",
+        "action_id": "attend_event",
+        "count": 3
+      },
+      "points_reward": 30
+    },
+    {
+      "id": "community_builder",
+      "name": "Community Builder",
+      "description": "Refer 3 friends to BLKOUTHUB",
+      "badge_image": "community_builder_badge.png",
+      "category": "referral",
+      "criteria": {
+        "type": "action",
+        "action_id": "refer_friend",
+        "count": 3
+      },
+      "points_reward": 40
+    },
+    {
+      "id": "level_5",
+      "name": "Level 5 Achieved",
+      "description": "Reach level 5 in BLKOUTHUB",
+      "badge_image": "level_5_badge.png",
+      "category": "level",
+      "criteria": {
+        "type": "level",
+        "level": 5
+      },
+      "points_reward": 100
+    }
+  ],
+  "access_levels": [
+    {
+      "id": "bronze",
+      "name": "Bronze Access",
+      "description": "Basic access for all members",
+      "min_level": 1,
+      "features": [
+        "General community access",
+        "Public events access",
+        "Basic resources"
+      ]
+    },
+    {
+      "id": "silver",
+      "name": "Silver Access",
+      "description": "Enhanced access for active members",
+      "min_level": 3,
+      "features": [
+        "All Bronze features",
+        "Special interest groups",
+        "Intermediate resources",
+        "Early event registration"
+      ]
+    },
+    {
+      "id": "gold",
+      "name": "Gold Access",
+      "description": "Premium access for dedicated members",
+      "min_level": 5,
+      "features": [
+        "All Silver features",
+        "Exclusive workshops",
+        "Advanced resources",
+        "Mentorship opportunities",
+        "Leadership channels"
+      ]
+    },
+    {
+      "id": "platinum",
+      "name": "Platinum Access",
+      "description": "Elite access for top contributors",
+      "min_level": 8,
+      "features": [
+        "All Gold features",
+        "VIP events",
+        "Expert resources",
+        "Leadership opportunities",
+        "Advisory board eligibility"
+      ]
+    }
+  ],
+  "exclusive_content": [
+    {
+      "id": "beginner_resources",
+      "name": "Beginner Resources",
+      "description": "Resources for those new to the community",
+      "required_level": 1,
+      "content_type": "resource_library",
+      "access_level": "bronze"
+    },
+    {
+      "id": "community_workshops",
+      "name": "Community Workshops",
+      "description": "Regular workshops for community members",
+      "required_level": 2,
+      "content_type": "event_series",
+      "access_level": "bronze"
+    },
+    {
+      "id": "special_interest_groups",
+      "name": "Special Interest Groups",
+      "description": "Groups focused on specific topics",
+      "required_level": 3,
+      "content_type": "group",
+      "access_level": "silver"
+    },
+    {
+      "id": "advanced_resources",
+      "name": "Advanced Resources",
+      "description": "In-depth resources for experienced members",
+      "required_level": 5,
+      "content_type": "resource_library",
+      "access_level": "gold"
+    },
+    {
+      "id": "leadership_channel",
+      "name": "Leadership Channel",
+      "description": "Channel for community leaders",
+      "required_level": 5,
+      "content_type": "channel",
+      "access_level": "gold"
+    },
+    {
+      "id": "vip_events",
+      "name": "VIP Events",
+      "description": "Exclusive events for top contributors",
+      "required_level": 8,
+      "content_type": "event_series",
+      "access_level": "platinum"
+    },
+    {
+      "id": "advisory_board",
+      "name": "Advisory Board",
+      "description": "Help shape the future of the community",
+      "required_level": 8,
+      "content_type": "group",
+      "access_level": "platinum"
+    }
+  ],
+  "community_challenges": [
+    {
+      "id": "welcome_challenge",
+      "name": "Welcome Challenge",
+      "description": "Complete your profile and introduce yourself",
+      "points": 20,
+      "requirements": [
+        {
+          "type": "action",
+          "action_id": "complete_profile",
+          "count": 1
+        }
+      ],
+      "status": "active",
+      "start_date": "2025-01-01T00:00:00",
+      "end_date": null
+    },
+    {
+      "id": "survey_challenge",
+      "name": "Survey Champion",
+      "description": "Complete 3 community surveys",
+      "points": 50,
+      "requirements": [
+        {
+          "type": "action",
+          "action_id": "complete_survey",
+          "count": 3
+        }
+      ],
+      "status": "active",
+      "start_date": "2025-01-01T00:00:00",
+      "end_date": null
+    },
+    {
+      "id": "event_challenge",
+      "name": "Event Explorer",
+      "description": "Attend 2 community events",
+      "points": 75,
+      "requirements": [
+        {
+          "type": "action",
+          "action_id": "attend_event",
+          "count": 2
+        }
+      ],
+      "status": "active",
+      "start_date": "2025-01-01T00:00:00",
+      "end_date": null
+    },
+    {
+      "id": "referral_challenge",
+      "name": "Community Builder",
+      "description": "Refer 3 friends to the community",
+      "points": 100,
+      "requirements": [
+        {
+          "type": "action",
+          "action_id": "refer_friend",
+          "count": 3
+        }
+      ],
+      "status": "active",
+      "start_date": "2025-01-01T00:00:00",
+      "end_date": null
+    },
+    {
+      "id": "level_challenge",
+      "name": "Level Up",
+      "description": "Reach level 5 in the community",
+      "points": 150,
+      "requirements": [
+        {
+          "type": "level",
+          "level": 5
+        }
+      ],
+      "status": "active",
+      "start_date": "2025-01-01T00:00:00",
+      "end_date": null
+    }
+  ]
+}

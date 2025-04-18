@@ -1,0 +1,300 @@
+{
+  "name": "BLKOUT Event Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "minutesInterval": 1,
+              "triggerAtHour": 1
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Configuration for sites to scrape\nconst sitesToScrape = [\n  {\n    name: 'Eventbrite - LGBTQ+ Events',\n    type: 'event_platform',\n    url: 'https://www.eventbrite.co.uk/d/united-kingdom/lgbtq--events/',\n    selectors: {\n      listItem: '.search-event-card-square',\n      title: '.event-card__title',\n      date: '.event-card__date',\n      location: '.location-info',\n      linkPath: 'a.event-card-link',\n      imageUrl: '.event-card__image img',\n      price: '.search-event-card__price'\n    }\n  },\n  {\n    name: 'Outsavvy',\n    type: 'event_platform',\n    url: 'https://www.outsavvy.com/events/uk',\n    selectors: {\n      listItem: '.event-card',\n      title: '.event-card__title',\n      date: '.event-card__date',\n      location: '.event-card__venue',\n      linkPath: 'a.event-card__link',\n      imageUrl: '.event-card__image',\n      price: '.event-card__price'\n    }\n  },\n  {\n    name: 'UK Black Pride',\n    type: 'organization',\n    url: 'https://www.ukblackpride.org.uk/events',\n    selectors: {\n      listItem: '.event-item', // Example selector\n      title: '.event-title',\n      date: '.event-date',\n      location: '.event-location',\n      linkPath: 'a.event-link',\n      imageUrl: '.event-image img',\n      price: '.event-price'\n    }\n  },\n  {\n    name: 'Stonewall',\n    type: 'organization',\n    url: 'https://www.stonewall.org.uk/events',\n    selectors: {\n      listItem: '.view-content .views-row',\n      title: 'h2.node__title',\n      date: '.node__date',\n      location: '.node__location',\n      linkPath: 'a',\n      imageUrl: '.node__image img',\n      price: '.node__price'\n    }\n  }\n];\n\n// Initialize array to store all scraped events\nlet allScrapedEvents = [];\n\n// Return the sites configuration for the next HTTP Request node\nreturn {\n  json: {\n    sitesToScrape\n  }\n};"
+      },
+      "name": "Configure Sites",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "splitInBatches",
+        "property": "json.sitesToScrape"
+      },
+      "name": "Split Sites",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node[\"Split Sites\"].json.url }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        850,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Get the HTML content and site configuration\nconst html = $input.item.json.body;\nconst site = $input.item.json;\nconst cheerio = require('cheerio');\n\ntry {\n  // Load HTML content with cheerio\n  const $ = cheerio.load(html);\n  const events = [];\n  \n  // Extract events using the site's selectors\n  $(site.selectors.listItem).each((i, el) => {\n    try {\n      // Base URL for resolving relative URLs\n      const baseUrl = new URL(site.url).origin;\n      \n      // Extract the event details\n      const title = $(el).find(site.selectors.title).text().trim();\n      const dateText = $(el).find(site.selectors.date).text().trim();\n      const location = $(el).find(site.selectors.location).text().trim();\n      \n      // Extract the link, handling both relative and absolute URLs\n      let link = $(el).find(site.selectors.linkPath).attr('href');\n      if (link && !link.startsWith('http')) {\n        link = `${baseUrl}${link.startsWith('/') ? '' : '/'}${link}`;\n      }\n      \n      // Extract image URL, handling both relative and absolute URLs\n      let imageUrl = $(el).find(site.selectors.imageUrl).attr('src') || \n                    $(el).find(site.selectors.imageUrl).attr('data-src') ||\n                    '';\n      if (imageUrl && !imageUrl.startsWith('http')) {\n        imageUrl = `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;\n      }\n      \n      // Extract price information\n      const price = $(el).find(site.selectors.price).text().trim() || 'Not specified';\n      \n      // Only add events with a title\n      if (title) {\n        events.push({\n          title,\n          dateText,\n          location,\n          link,\n          imageUrl,\n          price,\n          source: site.name,\n          sourceType: site.type,\n          sourceUrl: link,\n          scrapedAt: new Date().toISOString()\n        });\n      }\n    } catch (err) {\n      console.error(`Error parsing event from ${site.name}:`, err.message);\n    }\n  });\n  \n  console.log(`Scraped ${events.length} events from ${site.name}`);\n  \n  return {\n    json: {\n      siteName: site.name,\n      events\n    }\n  };\n} catch (error) {\n  console.error(`Error scraping ${site.name}:`, error.message);\n  return {\n    json: {\n      siteName: site.name,\n      events: [],\n      error: error.message\n    }\n  };\n}"
+      },
+      "name": "Extract Events",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1050,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": {
+            "events": "json.events"
+          }
+        },
+        "options": {
+          "outputFormat": "separateItems"
+        }
+      },
+      "name": "Combine Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Process the events to prepare them for insertion into the database\nconst events = $input.item.json.events;\nconst processedEvents = [];\n\nfor (const event of events) {\n  try {\n    // Parse date from text (this is a simplified example - real implementation would need more robust date parsing)\n    let startDateTime = new Date();\n    let endDateTime = new Date();\n    startDateTime.setDate(startDateTime.getDate() + 7); // Default to 1 week from now\n    endDateTime.setDate(endDateTime.getDate() + 7);\n    endDateTime.setHours(endDateTime.getHours() + 2); // Default 2 hour event\n    \n    // Simple date parsing - would need to be more robust in production\n    if (event.dateText) {\n      // This is a very simplified date parsing logic\n      // Would need to use a proper date parsing library in production\n      const dateMatch = event.dateText.match(/\\d{1,2}\\s+\\w+\\s+\\d{4}/);\n      if (dateMatch) {\n        const parsedDate = new Date(dateMatch[0]);\n        if (!isNaN(parsedDate.getTime())) {\n          startDateTime = parsedDate;\n          endDateTime = new Date(parsedDate);\n          endDateTime.setHours(endDateTime.getHours() + 2); // Default 2 hour event\n        }\n      }\n    }\n    \n    // Parse location into components (simplified)\n    let locationName = '';\n    let locationCity = '';\n    let isVirtual = false;\n    \n    if (event.location) {\n      if (event.location.toLowerCase().includes('online') || \n          event.location.toLowerCase().includes('virtual')) {\n        isVirtual = true;\n      } else {\n        // Simple parsing - split by comma if present\n        const locationParts = event.location.split(',');\n        if (locationParts.length > 1) {\n          locationName = locationParts[0].trim();\n          locationCity = locationParts[locationParts.length - 1].trim();\n        } else {\n          locationName = event.location.trim();\n        }\n      }\n    }\n    \n    // Determine appropriate event types based on source and title keywords\n    const eventTypes = [];\n    const titleLower = event.title.toLowerCase();\n    \n    if (titleLower.includes('workshop') || titleLower.includes('class')) {\n      eventTypes.push('workshop');\n    }\n    if (titleLower.includes('party') || titleLower.includes('social') || \n        titleLower.includes('mixer') || titleLower.includes('networking')) {\n      eventTypes.push('social');\n    }\n    if (titleLower.includes('community') || titleLower.includes('meeting')) {\n      eventTypes.push('community');\n    }\n    if (titleLower.includes('art') || titleLower.includes('exhibition') || \n        titleLower.includes('performance') || titleLower.includes('theatre') || \n        titleLower.includes('theater') || titleLower.includes('film')) {\n      eventTypes.push('art');\n    }\n    if (titleLower.includes('health') || titleLower.includes('wellbeing') || \n        titleLower.includes('well-being') || titleLower.includes('wellness')) {\n      eventTypes.push('health');\n    }\n    if (titleLower.includes('lecture') || titleLower.includes('talk') || \n        titleLower.includes('panel') || titleLower.includes('discussion')) {\n      eventTypes.push('education');\n    }\n    if (titleLower.includes('support') || titleLower.includes('group')) {\n      eventTypes.push('support');\n    }\n    \n    // If no specific types were determined, assign a default based on source\n    if (eventTypes.length === 0) {\n      if (event.sourceType === 'organization') {\n        eventTypes.push('community');\n      } else {\n        eventTypes.push('social');\n      }\n    }\n    \n    // Map source to BLKOUT relationship\n    let blkoutRelationship = 'other';\n    if (event.source === 'UK Black Pride') {\n      blkoutRelationship = 'QTIPOC ally';\n    } else if (event.source === 'Stonewall') {\n      blkoutRelationship = 'partner';\n    }\n    \n    // Create event object for database\n    const processedEvent = {\n      title: event.title,\n      description: `Event from ${event.source}. Visit the event link for full details.`,\n      short_description: `Event from ${event.source}`,\n      start_date_time: startDateTime.toISOString(),\n      end_date_time: endDateTime.toISOString(),\n      \n      location_name: locationName,\n      location_city: locationCity,\n      is_virtual: isVirtual,\n      \n      organizer_name: event.source,\n      organizer_website: new URL(event.sourceUrl).origin,\n      \n      blkout_relationship: blkoutRelationship,\n      \n      event_types: eventTypes,\n      tags: ['scraped', event.sourceType],\n      image_url: event.imageUrl,\n      external_link: event.link,\n      cost: event.price,\n      \n      source: 'scraped',\n      source_url: event.sourceUrl,\n      approved: false,  // Require manual approval for scraped events\n      created_at: new Date().toISOString(),\n      updated_at: new Date().toISOString()\n    };\n    \n    processedEvents.push(processedEvent);\n  } catch (error) {\n    console.error(`Error processing event ${event.title}:`, error.message);\n  }\n}\n\nreturn {\n  json: {\n    processedEvents,\n    eventCount: processedEvents.length\n  }\n};"
+      },
+      "name": "Process Events",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "splitInBatches",
+        "property": "json.processedEvents"
+      },
+      "name": "Split Events",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "public",
+        "table": "events",
+        "primaryKey": "external_link",
+        "additionalFields": {
+          "updated_at": "={{ new Date().toISOString() }}"
+        }
+      },
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1850,
+        300
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "upsert",
+        "baseId": "your_airtable_base_id",
+        "tableId": "your_airtable_table_id",
+        "options": {
+          "upsertKeys": [
+            "External Link"
+          ]
+        }
+      },
+      "name": "Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 1,
+      "position": [
+        1850,
+        450
+      ],
+      "credentials": {
+        "airtableApi": {
+          "id": "2",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "resource": "email",
+        "toEmail": "{{ $node[\"Airtable\"].json[\"Email\"] }}",
+        "subject": "New Events Scraped for BLKOUT UK",
+        "emailText": "=Hello,\n\nThe BLKOUT Event Scraper has just run and processed {{$node[\"Process Events\"].json.eventCount}} events. These events need review and approval before they will appear on the website.\n\nPlease log in to the admin dashboard to review the new events.\n\nBest regards,\nBLKOUT Event System"
+      },
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        2050,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "3",
+          "name": "Email account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Configure Sites",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure Sites": {
+      "main": [
+        [
+          {
+            "node": "Split Sites",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Sites": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Events": {
+      "main": [
+        [
+          {
+            "node": "Combine Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Results": {
+      "main": [
+        [
+          {
+            "node": "Process Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Events": {
+      "main": [
+        [
+          {
+            "node": "Split Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Events": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

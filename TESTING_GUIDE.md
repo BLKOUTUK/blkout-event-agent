@@ -1,6 +1,19 @@
-# BLKOUT NXT Onboarding System Testing Guide
+# BLKOUT BQM Member Management System Testing Guide
 
-This guide provides step-by-step instructions for testing the BLKOUT NXT onboarding system with the updated timing (6 hours between welcome and survey, 3-day reminder).
+This guide provides step-by-step instructions for testing the BLKOUT BQM Member Management system with the updated timing (6 hours between welcome and survey, 3-day reminder).
+
+## Repository Reorganization Testing
+
+Before testing the BQM Member Management system, verify that the repository reorganization is valid by running the automated test script:
+
+```bash
+python test_repository.py
+```
+
+This script checks:
+- The existence of all required directories
+- The existence of key files
+- The validity of JSON files
 
 ## Test Setup
 
@@ -28,7 +41,8 @@ All should have "New" status in the OnboardingStatus column.
 ### Step 1: Test Welcome Emails
 
 1. Open n8n dashboard
-2. Navigate to the "BLKOUT NXT Onboarding" workflow
+2. Navigate to the "BLKOUT BQM Member Management" workflow
+   - If you can't find it, import it from `bqm-members/bqm_member_management_workflow.json`
 3. Click "Test Workflow" button
 4. Check the execution results to verify welcome emails were sent
 5. Check your Google Sheet to confirm OnboardingStatus changed to "Welcome Sent"
@@ -104,9 +118,18 @@ If any step fails:
 
 ## Workflow IDs
 
-- BLKOUT NXT Onboarding: 9U7WKBX89mZCeyy3
+- BLKOUT BQM Member Management: 9U7WKBX89mZCeyy3 (formerly BLKOUT NXT Onboarding)
 - BLKOUT NXT Survey Follow-up (Updated): pk1rXgst1KaWsSYa
 - BLKOUT NXT Ally Drip Campaign: W11CYyvc0tvEnp6b
-- BLKOUT NXT Black Queer Men Drip Campaign: h0DO1MrAx0HJQuhe
+- BLKOUT BQM Drip Campaign: h0DO1MrAx0HJQuhe (formerly BLKOUT NXT Black Queer Men Drip Campaign)
 - BLKOUT NXT QTIPOC Organiser Drip Campaign: GnKiyiQqaqdB6mP2
 - BLKOUT NXT Organisation Drip Campaign: AcsMaOlCZEOdyBAh
+
+## Backward Compatibility
+
+If you need to access files using the old directory structure, symbolic links have been created:
+
+- `onboarding/` → `bqm-members/`
+- `rewards/` → `network-recognition/`
+
+If these symbolic links don't work, you may need to run the `create_symlinks.ps1` script with administrator privileges.
