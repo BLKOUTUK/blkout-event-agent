@@ -1,0 +1,69 @@
+{
+  "userRewards": {
+    "userId": "string",
+    "userName": "string",
+    "email": "string",
+    "currentPoints": "number",
+    "lifetimePoints": "number",
+    "level": "number",
+    "achievements": [
+      {
+        "id": "string",
+        "achievementId": "string",
+        "achievementName": "string",
+        "unlockedAt": "string (ISO date)"
+      }
+    ],
+    "recentActions": [
+      {
+        "id": "string",
+        "actionId": "string",
+        "actionName": "string",
+        "timestamp": "string (ISO date)",
+        "pointsEarned": "number",
+        "notes": "string"
+      }
+    ],
+    "createdAt": "string (ISO date)",
+    "updatedAt": "string (ISO date)"
+  },
+  "rewardActions": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "pointValue": "number",
+    "category": "string",
+    "isEnabled": "boolean",
+    "requiresApproval": "boolean",
+    "createdAt": "string (ISO date)",
+    "updatedAt": "string (ISO date)"
+  },
+  "achievements": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "category": "string",
+    "badgeImageUrl": "string",
+    "pointsRequired": "number",
+    "actionsRequired": [
+      {
+        "actionId": "string",
+        "count": "number"
+      }
+    ],
+    "isEnabled": "boolean",
+    "createdAt": "string (ISO date)",
+    "updatedAt": "string (ISO date)"
+  },
+  "pendingRewards": {
+    "id": "string",
+    "userId": "string",
+    "actionId": "string",
+    "notes": "string",
+    "metadata": "object",
+    "status": "string (pending, approved, rejected)",
+    "reviewedBy": "string",
+    "reviewedAt": "string (ISO date)",
+    "createdAt": "string (ISO date)"
+  }
+}

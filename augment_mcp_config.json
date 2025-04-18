@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "n8n-integration": {
+      "command": "node",
+      "args": [
+        "C:/Users/robbe/hub_community/hub_community/mcp-server-app/n8n-mcp-server/build/index.js"
+      ],
+      "env": {
+        "N8N_API_URL": "http://localhost:5678/api/v1",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzZjNTEyZC1lYmM3LTRiYzYtYWM5MS0zMzI3ZDgzY2UwMjMiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQ0MTMxNDYxLCJleHAiOjE3NTE4NjA4MDB9.V53vxA32661gF-Wq-MIwuRQEJ5vR0vowcmWAXPYY5Gg",
+        "DEBUG": "true"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
